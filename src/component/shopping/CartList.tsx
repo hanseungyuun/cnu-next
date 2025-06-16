@@ -1,5 +1,6 @@
 "use client";
 import { ProductItem } from "@/types/Product";
+import { useRouter } from 'next/navigation';
 
 interface Props {
   cart: { [productId: string]: number };
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export default function CartList({ cart, products, onRemove }: Props) {
+  const router = useRouter();
+  
   const cartItems = Object.entries(cart)
     .map(([id, quantity]) => {
       const product = products.find((p) => p.productId === id);
@@ -21,7 +24,14 @@ export default function CartList({ cart, products, onRemove }: Props) {
   );
 
   // 2.4 결제하기: "결제하기" 버튼을 클릭하면, 현재 장바구니에 담긴 상품을 확인해 **localStorage**에 저장 후, 결제완료(/checkout) 페이지로 이동한다.
-  const handleCheckout = () => {};
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      alert("장바구니에 상품이 없습니다.");
+      return;
+    }
+    localStorage.setItem('checkoutItems', JSON.stringify(cartItems));
+    router.push('/checkout');
+  };
 
   return (
     <div className="p-4 bg-white rounded shadow mt-6">
@@ -62,6 +72,7 @@ export default function CartList({ cart, products, onRemove }: Props) {
         <button
           onClick={handleCheckout}
           className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 flex justify-center"
+          disabled={cartItems.length === 0}
         >
           결제하기
         </button>
