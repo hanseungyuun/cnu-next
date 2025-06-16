@@ -29,7 +29,16 @@ export default function CartList({ cart, products, onRemove }: Props) {
       alert("장바구니에 상품이 없습니다.");
       return;
     }
-    localStorage.setItem('checkoutItems', JSON.stringify(cartItems));
+
+    const itemsToCheckout = cartItems.map(item => {
+      const { quantity, ...productDetails } = item;
+      return {
+        product: productDetails,
+        quantity: quantity
+      };
+    });
+    
+    localStorage.setItem('checkoutItems', JSON.stringify(itemsToChechout));
     router.push('/checkout');
   };
 
