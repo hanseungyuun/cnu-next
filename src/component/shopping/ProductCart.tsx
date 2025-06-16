@@ -1,4 +1,5 @@
 // ProductCartPage.tsx
+"use client";
 import { useEffect, useState } from "react";
 import ProductList from "./ProductList";
 import { ProductItem } from "@/types/Product";
@@ -8,6 +9,11 @@ export default function ProductCart({ items }: { items: ProductItem[] }) {
   const [cart, setCart] = useState<{ [id: string]: number }>({}); // {"88159814281" : 1}
   const [showCart, setShowCart] = useState(false); //  과제 2.1
 
+  useEffect(() => {
+    const hasItems = Object.keys(cart).length > 0;
+    setShowCart(hasItems);
+  }, [cart]);
+
   //  카트에 담기
   const handleAddToCart = (item: ProductItem, quantity: number) => {
     setCart((prev) => ({
@@ -15,12 +21,18 @@ export default function ProductCart({ items }: { items: ProductItem[] }) {
       [item.productId]: quantity,
     }));
 
-    localStorage.setItem(item.productId, quantity + "");
-    localStorage.getItem(item.productId);
+    //localStorage.setItem(item.productId, quantity + "");
+    //localStorage.getItem(item.productId);
   };
 
   /* 과제 2-3: Cart 아이템 지우기 */
-  const handleRemoveFromCart = () => {};
+  const handleRemoveFromCart = (productIdToRemove: string) => {
+    setCart((prevCart) => {
+      const cartEntries = Object.entries(prevCart);
+      const filteredEntries = cartEntries.filter(([key, value]) => key !== productIdToRemove);
+      const newCart = Object.fromEntries(filteredEntries);
+      return newCart;
+  };
 
   return (
     <div className="p-10">
