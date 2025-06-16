@@ -1,5 +1,6 @@
 // CheckoutPage
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from 'next/link';
 import { ProductItem } from "@/types/Product";
 
 interface CheckoutItem {
