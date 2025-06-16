@@ -8,6 +8,9 @@ interface User {
   name: string;
   // age: number
   // 추가하고 싶은 속성들 ...
+  userId: string;
+  age: number;
+  phoneNumber: string;
 }
 // UserContextType
 interface UserContextType {
